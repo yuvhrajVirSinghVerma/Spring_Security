@@ -1,34 +1,26 @@
 package com.example.demo.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Entity
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class employee {
+public class Laptops {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int Id;
+    int LaptopId;
 
-    private String EmpName;
+    String laptopName;
 
-    @OneToOne(mappedBy = "deptManager")
+    @ManyToOne
     @JsonIgnore
-    private department dept;
-
-    @OneToMany(mappedBy = "employee")
-    List<Laptops> laptops;
-
+    employee employee;
 }
