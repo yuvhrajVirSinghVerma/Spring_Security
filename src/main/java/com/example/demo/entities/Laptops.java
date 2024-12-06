@@ -6,13 +6,15 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Laptops {
+@EntityListeners(AuditingEntityListener.class)
+public class Laptops extends AuditingBaseClass {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,4 +25,6 @@ public class Laptops {
     @ManyToOne
     @JsonIgnore
     employee employee;
+
+//    AuditingBaseClass baseclass;
 }

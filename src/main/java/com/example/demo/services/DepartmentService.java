@@ -35,6 +35,8 @@ public class DepartmentService {
     }
 
     public List<department> getDeps() {
-        return DeptRepo.findAll();
+        List<department>l=DeptRepo.findAll();
+//        System.out.println("depmana+++++ "+l.get(0).getDeptManager());
+        return l;
     }
 }
