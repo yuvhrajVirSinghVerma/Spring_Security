@@ -1,0 +1,20 @@
+<configuration>
+<!--    <appender name="ROLLING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+
+<!--        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">-->
+<!--            <fileNamePattern>logs/application.%d{yyyy-MM-dd}.%i.log</fileNamePattern>-->
+<!--            <maxHistory>30</maxHistory>-->
+<!--            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFileNamingAndTriggeringPolicy">-->
+<!--                <maxFileSize>1-->
+<!--                    KB</maxFileSize>-->
+<!--            </timeBasedFileNamingAndTriggeringPolicy>-->
+<!--        </rollingPolicy>-->
+<!--        <encoder>-->
+<!--            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg%n</pattern>-->
+<!--        </encoder>-->
+<!--    </appender>-->
+<!--    <root>-->
+<!--        <level value="INFO"/>-->
+<!--        <appender-ref ref="ROLLING_FILE"/>-->
+<!--    </root>-->
+</configuration>
