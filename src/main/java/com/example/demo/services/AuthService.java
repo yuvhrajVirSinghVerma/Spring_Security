@@ -1,6 +1,7 @@
 package com.example.demo.services;
 
 import com.example.demo.Dto.LogInDto;
+import com.example.demo.Dto.LoginResponseDto;
 import com.example.demo.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,13 +16,14 @@ public class AuthService {
     AuthenticationManager authenticationManager; //created its bean in config
     @Autowired
     JwtService jwtServ;
-    public String Login(LogInDto loginDt) {
+    public LoginResponseDto Login(LogInDto loginDt) {
         //invokes daoAuthenticationprovider which uses our custom userdetailservice loadbyusername to verify user from our repo
         Authentication authentication=authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDt.getEmail(),loginDt.getPassword()));
 
         User user= (User) authentication.getPrincipal();
         System.out.println("user "+user);
-        String token=jwtServ.generateToken(user);
-        return token;
+        String Accesstoken=jwtServ.generateAccessToken(user);
+        String RefreshToken= jwtServ.generateRefreshToken(user);
+        return new LoginResponseDto(user.getId(),Accesstoken,RefreshToken);
     }
 }

@@ -22,7 +22,7 @@ public class JwtService {
        return Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
 
-    public String generateToken(User user){
+    public String generateAccessToken(User user){
         System.out.println(secret);
        return Jwts.builder()
                 .subject(user.getId().toString())
@@ -30,6 +30,16 @@ public class JwtService {
                 .claim("roles", Set.of("ADMIN","USER"))
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis()+1000*60))
+                .signWith(getSecret())
+                .compact();
+    }
+
+    public String generateRefreshToken(User user){
+        System.out.println(secret);
+        return Jwts.builder()
+                .subject(user.getId().toString())
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis()+1000*60*60*24*30*6))
                 .signWith(getSecret())
                 .compact();
     }
