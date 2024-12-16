@@ -16,6 +16,9 @@ public class AuthService {
     AuthenticationManager authenticationManager; //created its bean in config
     @Autowired
     JwtService jwtServ;
+
+    @Autowired
+    UserService userService;
     public LoginResponseDto Login(LogInDto loginDt) {
         //invokes daoAuthenticationprovider which uses our custom userdetailservice loadbyusername to verify user from our repo
         Authentication authentication=authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDt.getEmail(),loginDt.getPassword()));
@@ -25,5 +28,14 @@ public class AuthService {
         String Accesstoken=jwtServ.generateAccessToken(user);
         String RefreshToken= jwtServ.generateRefreshToken(user);
         return new LoginResponseDto(user.getId(),Accesstoken,RefreshToken);
+    }
+
+    public LoginResponseDto refreshToken(String refreshToken) {
+        Long Id= jwtServ.getUserId(refreshToken);//this validates that our refresh token is valid;
+        User user=userService.getUserById(Id);
+
+        String AccessToken= jwtServ.generateAccessToken(user);
+
+        return new LoginResponseDto(user.getId(),AccessToken,refreshToken);
     }
 }

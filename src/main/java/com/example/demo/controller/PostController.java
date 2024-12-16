@@ -60,14 +60,19 @@ public class PostController {
         return "You Are Authenticated";
     }
 
-    @PostMapping("/refresh")
+    //if we make request .refrsh we will not get response as user has to be authenticated we have defined this in webconfig
+    @PostMapping("/auth/refresh")
     public ResponseEntity<LoginResponseDto> refresh(HttpServletRequest request){
+        System.out.println("refreshCookies "+ Arrays.toString(request.getCookies()));
         String refreshToken= Arrays.stream(request.getCookies()).
                 filter(cookie->"RefreshToken".equals(cookie.getName())).
                 findFirst()
-                .map(cookie -> cookie.getValue())
-                .orElseThrow(()->new AuthenticationServiceException(""));
+                .map(Cookie::getValue)
+                .orElseThrow(()->new AuthenticationServiceException("Refresh token not found inside the Cookies"));
 
+        System.out.println("refrshtoken controller "+refreshToken);
+        LoginResponseDto loginResp=authService.refreshToken(refreshToken);
+        return  ResponseEntity.ok(loginResp);
 
     }
 }
