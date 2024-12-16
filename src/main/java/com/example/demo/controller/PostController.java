@@ -51,6 +51,7 @@ public class PostController {
         LoginResponseDto loginResp=authService.Login(loginDt);
         Cookie cookie=new Cookie("RefreshToken",loginResp.getRefreshToken());
         cookie.setHttpOnly(true);
+        cookie.setPath(("/"));
         resp.addCookie(cookie);
         return  ResponseEntity.ok(loginResp);
     }
@@ -60,7 +61,7 @@ public class PostController {
         return "You Are Authenticated";
     }
 
-    //if we make request .refrsh we will not get response as user has to be authenticated we have defined this in webconfig
+    //if we make request /refrsh we will not get response as user has to be authenticated we have defined this in webconfig
     @PostMapping("/auth/refresh")
     public ResponseEntity<LoginResponseDto> refresh(HttpServletRequest request){
         System.out.println("refreshCookies "+ Arrays.toString(request.getCookies()));

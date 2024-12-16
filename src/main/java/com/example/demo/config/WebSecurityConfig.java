@@ -3,6 +3,7 @@ package com.example.demo.config;
 import com.example.demo.advice.AuthemticationEntryPointClass;
 import com.example.demo.filters.JwtAuthFilter;
 import com.example.demo.services.JwtService;
+import com.example.demo.services.SessionService;
 import com.example.demo.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -32,6 +33,8 @@ public class WebSecurityConfig {
     @Autowired
     UserService userservice;
 
+    @Autowired
+    SessionService sessionService;
 
 
     private final HandlerExceptionResolver handlerExceptionResolver;
@@ -49,7 +52,7 @@ public class WebSecurityConfig {
                 anyRequest().authenticated()).
                 csrf(csrfcnfg -> csrfcnfg.disable()).
                 sessionManagement(session -> session.sessionCreationPolicy((SessionCreationPolicy.STATELESS)))
-                .addFilterBefore(new JwtAuthFilter(handlerExceptionResolver, jwtservice, userservice), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JwtAuthFilter(handlerExceptionResolver, jwtservice, userservice,sessionService), UsernamePasswordAuthenticationFilter.class);
 //                addFilterAfter(testErrorHandlerFilter, JwtAuthFilter.class);
 //                formLogin(Customizer.withDefaults());
         return httpSecurity.build();

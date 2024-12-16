@@ -19,6 +19,9 @@ public class AuthService {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    SessionService sessionService;
     public LoginResponseDto Login(LogInDto loginDt) {
         //invokes daoAuthenticationprovider which uses our custom userdetailservice loadbyusername to verify user from our repo
         Authentication authentication=authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDt.getEmail(),loginDt.getPassword()));
@@ -27,11 +30,20 @@ public class AuthService {
         System.out.println("user "+user);
         String Accesstoken=jwtServ.generateAccessToken(user);
         String RefreshToken= jwtServ.generateRefreshToken(user);
+
+
+        System.out.println("refrestoken generated "+RefreshToken);
+        System.out.println("Accesstoken generated "+Accesstoken);
+
+        sessionService.generateSession(user,RefreshToken);//creating session for a new user
+
         return new LoginResponseDto(user.getId(),Accesstoken,RefreshToken);
     }
 
     public LoginResponseDto refreshToken(String refreshToken) {
         Long Id= jwtServ.getUserId(refreshToken);//this validates that our refresh token is valid;
+
+        sessionService.validateSession(refreshToken);
         User user=userService.getUserById(Id);
 
         String AccessToken= jwtServ.generateAccessToken(user);
