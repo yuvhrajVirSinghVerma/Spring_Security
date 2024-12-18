@@ -89,7 +89,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                   if(!sessionService.validateSession(refreshToken)){
                       throw new JwtException("Session Limit Exceeded");
                   }
-                  UsernamePasswordAuthenticationToken authentication=new UsernamePasswordAuthenticationToken(user,null,null);
+                  UsernamePasswordAuthenticationToken authentication=new UsernamePasswordAuthenticationToken(user,null,user.getAuthorities());
                   authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));//contain users device info , ip can be useful for rate limiting
                   SecurityContextHolder.getContext().setAuthentication(authentication);
                   System.out.println("securtiycontext "+SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());

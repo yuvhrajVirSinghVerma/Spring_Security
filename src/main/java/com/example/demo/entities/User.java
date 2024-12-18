@@ -1,18 +1,20 @@
 package com.example.demo.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.example.demo.entities.enums.Permissions;
+import com.example.demo.entities.enums.Role;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -27,9 +29,23 @@ public class User implements UserDetails {
     private String name;
     private String email;
     private String password;
+
+    @Enumerated(value = EnumType.STRING)
+    @ElementCollection(fetch = FetchType.EAGER)
+    Set<Role>Roles;
+
+    @Enumerated(value = EnumType.STRING)
+    @ElementCollection(fetch = FetchType.EAGER)
+    Set<Permissions>permissions;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        Set<SimpleGrantedAuthority>roles_authorities= Roles.stream().map(role->new SimpleGrantedAuthority("ROLE_"+role.name()))
+                .collect(Collectors.toSet());
+
+        permissions.stream().forEach(permission->roles_authorities.add(new SimpleGrantedAuthority(permission.name())));
+
+        return roles_authorities;
     }
 
     @Override

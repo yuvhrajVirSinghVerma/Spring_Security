@@ -1,6 +1,8 @@
 package com.example.demo.config;
 
 import com.example.demo.advice.AuthemticationEntryPointClass;
+import com.example.demo.entities.enums.Permissions;
+import com.example.demo.entities.enums.Role;
 import com.example.demo.filters.JwtAuthFilter;
 import com.example.demo.services.JwtService;
 import com.example.demo.services.SessionService;
@@ -8,6 +10,7 @@ import com.example.demo.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -49,6 +52,10 @@ public class WebSecurityConfig {
         authorizeHttpRequests(auth ->
         auth.requestMatchers("/public", "/auth/**").permitAll().//making this route public no authentication needed
                 requestMatchers("/Admin").hasAnyRole("ADMIN").
+//                requestMatchers("/Post/**").hasRole(Role.ADMIN.name()).
+                requestMatchers(HttpMethod.POST,"/Post/**").hasAnyRole(Role.ADMIN.name(), Permissions.POST_CREATE.name()).
+                requestMatchers(HttpMethod.GET,"/Post/**").hasAnyRole(Role.USER.name(), Permissions.POST_VIEW.name()).
+
                 anyRequest().authenticated()).
                 csrf(csrfcnfg -> csrfcnfg.disable()).
                 sessionManagement(session -> session.sessionCreationPolicy((SessionCreationPolicy.STATELESS)))

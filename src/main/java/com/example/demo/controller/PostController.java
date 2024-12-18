@@ -61,6 +61,16 @@ public class PostController {
         return "You Are Authenticated";
     }
 
+    @GetMapping("/Post/1")
+    public String getPost(){
+        return "Post 1";
+    }
+
+    @PostMapping("/Post/1")
+    public String CreatePOST(){
+        return "Created Post 1";
+    }
+
     //if we make request /refrsh we will not get response as user has to be authenticated we have defined this in webconfig
     @PostMapping("/auth/refresh")
     public ResponseEntity<LoginResponseDto> refresh(HttpServletRequest request){
